@@ -1,11 +1,20 @@
 package CSCI3381Project1;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Tester {
 	
-	public static void main(String[] args) {
+	public boolean testInFile() {
+			File tfile = new File("./CSCI3381Project1/trainingProcessed.txt");
+			if (tfile.exists() == true) {
+				return true;
+			}
+			else return false;
+	}
+	
+	public void testAll() {
 		
 		System.out.println("\n!---Starting---!\n");
 //		
@@ -101,6 +110,7 @@ public class Tester {
 //		
 //		
 		System.out.println("\n!---Stopping---!\n");
+
 	}
 
 }
