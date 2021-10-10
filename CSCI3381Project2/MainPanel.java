@@ -14,10 +14,13 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import CSCI3381Project1.*;
+import javax.swing.JRadioButton;
+import javax.swing.JComboBox;
+import javax.swing.DefaultComboBoxModel;
 
 public class MainPanel extends JPanel{
 	
-	//Global elements
+	//Global/shared elements
 	private TweetCollection tweets;
 	private JTextField titlebanner;
 	private JButton backbutton;
@@ -36,9 +39,13 @@ public class MainPanel extends JPanel{
 	private JScrollPane corescrollpane;
 	private DefaultListModel<String> coremodel;
 	private JList<String> corelist;
-
+	
 	//Search elements
-
+	private JTextField searchfield;
+	private JButton deletetweetbutton;
+	private JButton searcherbutton;
+	private JComboBox<String> searchoptioncombobox;
+	
 	//Post elements
 	
 	//Predict elements
@@ -164,6 +171,37 @@ public class MainPanel extends JPanel{
 		);
 		add(backbutton);
 		
+		searchfield = new JTextField();
+		searchfield.setHorizontalAlignment(SwingConstants.CENTER);
+		searchfield.setBounds(20, 193, 120, 60);
+		add(searchfield);
+		searchfield.setColumns(10);
+		
+		searcherbutton = new JButton("Search");
+		searcherbutton.setBounds(20, 290, 120, 60);
+		searcherbutton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				search(searchfield.getText());
+				}
+			}
+		);
+		add(searcherbutton);
+		
+		searchoptioncombobox = new JComboBox<String>();
+		searchoptioncombobox.setModel(new DefaultComboBoxModel<String>(new String[] {"Search by ID", "Search by User"}));
+		searchoptioncombobox.setBounds(20, 100, 120, 60);
+		add(searchoptioncombobox);
+		
+		deletetweetbutton = new JButton("Delete");
+		deletetweetbutton.setBounds(400, 401, 98, 26);
+		deletetweetbutton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				delete(corelist.getSelectedValue());
+				}
+			}
+		);
+		add(deletetweetbutton);
+		
 		//Initialized post elements
 
 		//Initialize predict elements
@@ -177,6 +215,11 @@ public class MainPanel extends JPanel{
 		loginunametf.setVisible(true);
 		loginanonbutton.setVisible(true);
 		loginuserbutton.setVisible(true);
+		
+		searchfield.setVisible(false);
+		deletetweetbutton.setVisible(false);
+		searcherbutton.setVisible(false);
+		searchoptioncombobox.setVisible(false);
 		
 		corebackbutton.setVisible(false);
 		coresearchbutton.setVisible(false);
@@ -192,6 +235,11 @@ public class MainPanel extends JPanel{
 		loginunametf.setVisible(false);
 		loginanonbutton.setVisible(false);
 		loginuserbutton.setVisible(false);
+		
+		searchfield.setVisible(false);
+		deletetweetbutton.setVisible(false);
+		searcherbutton.setVisible(false);
+		searchoptioncombobox.setVisible(false);
 		
 		corebackbutton.setVisible(true);
 		coresearchbutton.setVisible(true);
@@ -225,21 +273,64 @@ public class MainPanel extends JPanel{
 	}
 	
 	public void toSearch(String username) {
+		coremodel.removeAllElements();
 		titlebanner.setText("Search");
 		backbutton.setVisible(true);
+
+		loginunametf.setVisible(false);
+		loginanonbutton.setVisible(false);
+		loginuserbutton.setVisible(false);
+		
+		searchfield.setVisible(true);
+		searchfield.setText(loginunametf.getText());
+		deletetweetbutton.setVisible(true);
+		searcherbutton.setVisible(true);
+		searchoptioncombobox.setVisible(true);
+		searchoptioncombobox.setSelectedIndex(1);
 		
 		corebackbutton.setVisible(false);
 		coresearchbutton.setVisible(false);
 		corepostbutton.setVisible(false);
 		corepredictbutton.setVisible(false);
 		corerefreshbutton.setVisible(false);
-		corelist.setVisible(false);
-		corescrollpane.setVisible(false);
-		
+		corelist.setVisible(true);
+		corescrollpane.setVisible(true);
 	}
+	
+	public void search(String query) {
+		coremodel.removeAllElements();
+		//Searching by ID
+		if (searchoptioncombobox.getSelectedIndex() == 0) {
+			int tweetid = Integer.parseInt(query);
+			coremodel.addElement(tweets.searchByID(tweetid).toString());
+		}
+		//Searching by user
+		else {
+			ArrayList<Tweet> utweets = tweets.searchByUser(query);
+			for (Tweet utweet : utweets) {
+				coremodel.addElement(utweet.toString());
+			}
+		}
+	}
+	
+	public void delete(String tweetstring) {
+		String[] stuff = tweetstring.split(",");
+		tweets.removeTweet(tweets.searchByID(Long.parseLong(stuff[1])));
+		search(searchfield.getText());
+	}
+	
 	public void toPost(String username) {
 		titlebanner.setText("Post");
 		backbutton.setVisible(true);
+		
+		loginunametf.setVisible(false);
+		loginanonbutton.setVisible(false);
+		loginuserbutton.setVisible(false);
+		
+		searchfield.setVisible(false);
+		deletetweetbutton.setVisible(false);
+		searcherbutton.setVisible(false);
+		searchoptioncombobox.setVisible(false);
 		
 		corebackbutton.setVisible(false);
 		coresearchbutton.setVisible(false);
@@ -253,6 +344,15 @@ public class MainPanel extends JPanel{
 	public void toPredict(String username) {
 		titlebanner.setText("Predict");
 		backbutton.setVisible(true);
+		
+		loginunametf.setVisible(false);
+		loginanonbutton.setVisible(false);
+		loginuserbutton.setVisible(false);
+		
+		searchfield.setVisible(false);
+		deletetweetbutton.setVisible(false);
+		searcherbutton.setVisible(false);
+		searchoptioncombobox.setVisible(false);
 		
 		corebackbutton.setVisible(false);
 		coresearchbutton.setVisible(false);
