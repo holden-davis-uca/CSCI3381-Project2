@@ -17,12 +17,13 @@ import CSCI3381Project1.*;
 
 public class MainPanel extends JPanel{
 	
-	//TweetCollection
+	//Global elements
 	private TweetCollection tweets;
+	private JTextField titlebanner;
+	private JButton backbutton;
 	
 	//Login elements
 	private JTextField loginunametf;
-	private JTextField logintitlebanner;
 	private JButton loginanonbutton;
 	private JButton loginuserbutton;
 	
@@ -32,7 +33,6 @@ public class MainPanel extends JPanel{
 	private JButton corepostbutton;
 	private JButton corepredictbutton;
 	private JButton corerefreshbutton;
-	private JTextField coretitlebanner;
 	private JScrollPane corescrollpane;
 	private DefaultListModel<String> coremodel;
 	private JList<String> corelist;
@@ -40,7 +40,7 @@ public class MainPanel extends JPanel{
 	//Search elements
 
 	//Post elements
-
+	
 	//Predict elements
 
 	//Initialize ALL elements in constructor, but only set login elements to be visible by calling toLogin() at the end
@@ -81,16 +81,17 @@ public class MainPanel extends JPanel{
 		);
 		add(loginuserbutton);
 		
-		logintitlebanner = new JTextField();
-		logintitlebanner.setEditable(false);
-		logintitlebanner.setForeground(Color.WHITE);
-		logintitlebanner.setFont(new Font("Consolas", Font.BOLD | Font.ITALIC, 20));
-		logintitlebanner.setBackground(Color.DARK_GRAY);
-		logintitlebanner.setHorizontalAlignment(SwingConstants.CENTER);
-		logintitlebanner.setText("JTwitter");
-		logintitlebanner.setBounds(0, 30, 720, 40);
-		logintitlebanner.setColumns(40);
-		add(logintitlebanner);
+		titlebanner = new JTextField();
+		titlebanner.setEditable(false);
+		titlebanner.setForeground(Color.WHITE);
+		titlebanner.setFont(new Font("Consolas", Font.BOLD | Font.ITALIC, 20));
+		titlebanner.setBackground(Color.DARK_GRAY);
+		titlebanner.setHorizontalAlignment(SwingConstants.CENTER);
+		titlebanner.setText("JTwitter");
+		titlebanner.setBounds(0, 30, 720, 40);
+		titlebanner.setColumns(40);
+		titlebanner.setVisible(true);
+		add(titlebanner);
 		
 		//Intialize core elements
 		corebackbutton = new JButton("Back");
@@ -144,16 +145,6 @@ public class MainPanel extends JPanel{
 		);
 		add(corerefreshbutton);
 		
-		coretitlebanner = new JTextField();
-		coretitlebanner.setEditable(false);
-		coretitlebanner.setForeground(Color.WHITE);
-		coretitlebanner.setFont(new Font("Consolas", Font.BOLD | Font.ITALIC, 20));
-		coretitlebanner.setBackground(Color.DARK_GRAY);
-		coretitlebanner.setHorizontalAlignment(SwingConstants.CENTER);
-		coretitlebanner.setBounds(0, 30, 720, 40);
-		coretitlebanner.setColumns(40);
-		add(coretitlebanner);
-		
 		coremodel = new DefaultListModel<String>();
 		corelist = new JList<String>(coremodel);
 		corescrollpane = new JScrollPane(corelist);
@@ -162,7 +153,19 @@ public class MainPanel extends JPanel{
 		add(corescrollpane);
 
 		//Initialize search elements
+		backbutton = new JButton("Back");
+		backbutton.setFont(new Font("Source Serif Pro", Font.PLAIN, 10));
+		backbutton.setBounds(20, 400, 60, 30);
+		backbutton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				toCore(loginunametf.getText());
+				}
+			}
+		);
+		add(backbutton);
+		
 		//Initialized post elements
+
 		//Initialize predict elements
 		
 		//Always start at login screen
@@ -171,9 +174,7 @@ public class MainPanel extends JPanel{
 	}
 
 	public void toLogin() {
-		loginunametf.setText("Username");
 		loginunametf.setVisible(true);
-		logintitlebanner.setVisible(true);
 		loginanonbutton.setVisible(true);
 		loginuserbutton.setVisible(true);
 		
@@ -182,14 +183,13 @@ public class MainPanel extends JPanel{
 		corepostbutton.setVisible(false);
 		corepredictbutton.setVisible(false);
 		corerefreshbutton.setVisible(false);
-		coretitlebanner.setVisible(false);
+		titlebanner.setText("JTwitter");
 		corelist.setVisible(false);
 		corescrollpane.setVisible(false);
 	}
 	public void toCore(String username) {
 		coreTweets(loginunametf.getText());
 		loginunametf.setVisible(false);
-		logintitlebanner.setVisible(false);
 		loginanonbutton.setVisible(false);
 		loginuserbutton.setVisible(false);
 		
@@ -197,14 +197,13 @@ public class MainPanel extends JPanel{
 		coresearchbutton.setVisible(true);
 		corepostbutton.setVisible(true);
 		corepredictbutton.setVisible(true);
-		coretitlebanner.setVisible(true);
 		corelist.setVisible(true);
 		corescrollpane.setVisible(true);
 	}
 	public void coreTweets(String user) {
 		if (user.equals("Username")){
 			coremodel.removeAllElements();
-			coretitlebanner.setText("Random Tweets");
+			titlebanner.setText("Random Tweets");
 			for (int i = 0; i < 30; i++) {
 				Tweet randtweet = tweets.randomTweet();
 				coremodel.addElement(randtweet.toString());
@@ -214,7 +213,7 @@ public class MainPanel extends JPanel{
 		}
 		else {
 			coremodel.removeAllElements();
-			coretitlebanner.setText("My Tweets");
+			titlebanner.setText("My Tweets");
 			ArrayList<Tweet> utweets = tweets.searchByUser(user);
 			for (Tweet utweet : utweets) {
 				coremodel.addElement(utweet.toString());
@@ -226,12 +225,42 @@ public class MainPanel extends JPanel{
 	}
 	
 	public void toSearch(String username) {
+		titlebanner.setText("Search");
+		backbutton.setVisible(true);
+		
+		corebackbutton.setVisible(false);
+		coresearchbutton.setVisible(false);
+		corepostbutton.setVisible(false);
+		corepredictbutton.setVisible(false);
+		corerefreshbutton.setVisible(false);
+		corelist.setVisible(false);
+		corescrollpane.setVisible(false);
 		
 	}
 	public void toPost(String username) {
+		titlebanner.setText("Post");
+		backbutton.setVisible(true);
+		
+		corebackbutton.setVisible(false);
+		coresearchbutton.setVisible(false);
+		corepostbutton.setVisible(false);
+		corepredictbutton.setVisible(false);
+		corerefreshbutton.setVisible(false);
+		corelist.setVisible(false);
+		corescrollpane.setVisible(false);
 
 	}
 	public void toPredict(String username) {
+		titlebanner.setText("Predict");
+		backbutton.setVisible(true);
+		
+		corebackbutton.setVisible(false);
+		coresearchbutton.setVisible(false);
+		corepostbutton.setVisible(false);
+		corepredictbutton.setVisible(false);
+		corerefreshbutton.setVisible(false);
+		corelist.setVisible(false);
+		corescrollpane.setVisible(false);
 
 	}
 }
