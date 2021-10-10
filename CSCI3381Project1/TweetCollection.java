@@ -173,6 +173,18 @@ public class TweetCollection {
 		return randTweet;
 	}
 	
+	//Generate a new long that's not used already when posting a new tweet so no existing tweets get overwritten
+	//Recursively generate new Longs until an unused one is found
+	public Long genID() {
+		Random rand = new Random();
+		long range = 2193602129L;
+		long ID = (long)(rand.nextDouble()*range);
+		while (TweetCollection.containsKey(ID)) {
+			genID();
+		}
+		return ID;
+	}
+	
 	/*
 	 * All of the code pertaining to the prediction methodology and algorithm (effectively everything below this comment) was written from scratch
 	 * 

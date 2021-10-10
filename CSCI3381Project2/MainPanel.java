@@ -16,7 +16,10 @@ import java.util.ArrayList;
 import CSCI3381Project1.*;
 import javax.swing.JRadioButton;
 import javax.swing.JComboBox;
+import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JCheckBox;
+import javax.swing.JLabel;
 
 public class MainPanel extends JPanel{
 	
@@ -24,6 +27,9 @@ public class MainPanel extends JPanel{
 	private TweetCollection tweets;
 	private JTextField titlebanner;
 	private JButton backbutton;
+	private JScrollPane tweetscrollpane;
+	private DefaultListModel<String> tweetmodel;
+	private JList<String> tweetlist;
 	
 	//Login elements
 	private JTextField loginunametf;
@@ -36,18 +42,30 @@ public class MainPanel extends JPanel{
 	private JButton corepostbutton;
 	private JButton corepredictbutton;
 	private JButton corerefreshbutton;
-	private JScrollPane corescrollpane;
-	private DefaultListModel<String> coremodel;
-	private JList<String> corelist;
-	
+
 	//Search elements
 	private JTextField searchfield;
 	private JButton deletetweetbutton;
 	private JButton searcherbutton;
 	private JComboBox<String> searchoptioncombobox;
+
 	
 	//Post elements
-	
+	private JButton postposterbutton;
+	private JCheckBox genIDcheckbox;
+	private JRadioButton pol2radio;
+	private JRadioButton pol4radio;
+	private JRadioButton pol0radio;
+	private ButtonGroup polarities;
+	private JTextField postIDfield;
+	private JTextField postuserfield;
+	private JTextField postcontentfield;
+	private JLabel pollabel;
+	private JLabel idlabel;
+	private JLabel userlabel;
+	private JLabel contentlabel;
+
+
 	//Predict elements
 
 	//Initialize ALL elements in constructor, but only set login elements to be visible by calling toLogin() at the end
@@ -152,12 +170,12 @@ public class MainPanel extends JPanel{
 		);
 		add(corerefreshbutton);
 		
-		coremodel = new DefaultListModel<String>();
-		corelist = new JList<String>(coremodel);
-		corescrollpane = new JScrollPane(corelist);
-		corescrollpane.setBounds(200, 100, 500, 250);
+		tweetmodel = new DefaultListModel<String>();
+		tweetlist = new JList<String>(tweetmodel);
+		tweetscrollpane = new JScrollPane(tweetlist);
+		tweetscrollpane.setBounds(200, 100, 500, 250);
 		coreTweets(loginunametf.getText());
-		add(corescrollpane);
+		add(tweetscrollpane);
 
 		//Initialize search elements
 		backbutton = new JButton("Back");
@@ -170,6 +188,7 @@ public class MainPanel extends JPanel{
 			}
 		);
 		add(backbutton);
+		
 		
 		searchfield = new JTextField();
 		searchfield.setHorizontalAlignment(SwingConstants.CENTER);
@@ -196,13 +215,95 @@ public class MainPanel extends JPanel{
 		deletetweetbutton.setBounds(400, 401, 98, 26);
 		deletetweetbutton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				delete(corelist.getSelectedValue());
+				delete(tweetlist.getSelectedValue());
 				}
 			}
 		);
 		add(deletetweetbutton);
 		
 		//Initialized post elements
+		postposterbutton = new JButton("Post");
+		postposterbutton.setBounds(344, 401, 98, 26);
+		postposterbutton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				post();
+				}
+			}
+		);
+		add(postposterbutton);
+		
+		genIDcheckbox = new JCheckBox("Auto Generate ID");
+		genIDcheckbox.setHorizontalAlignment(SwingConstants.CENTER);
+		genIDcheckbox.setBounds(204, 402, 128, 24);
+		genIDcheckbox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (genIDcheckbox.isSelected()) {
+					postIDfield.setEditable(false);
+					postIDfield.setText(tweets.genID().toString());
+				}
+				else {
+					postIDfield.setEditable(true);
+					postIDfield.setText("");
+				}
+				}
+			}
+		);
+		add(genIDcheckbox);
+		
+		pol2radio = new JRadioButton("2");
+		pol2radio.setBounds(8, 225, 72, 24);
+		add(pol2radio);
+		
+		pol4radio = new JRadioButton("4");
+		pol4radio.setBounds(8, 197, 72, 24);
+		add(pol4radio);
+		
+		pol0radio = new JRadioButton("0");
+		pol0radio.setBounds(8, 253, 72, 24);
+		add(pol0radio);
+		
+		polarities = new ButtonGroup();
+		polarities.add(pol2radio);
+		polarities.add(pol4radio);
+		polarities.add(pol0radio);
+		
+		postIDfield = new JTextField();
+		postIDfield.setHorizontalAlignment(SwingConstants.CENTER);
+		postIDfield.setBounds(92, 227, 114, 20);
+		add(postIDfield);
+		postIDfield.setColumns(10);
+		
+		postuserfield = new JTextField();
+		postuserfield.setHorizontalAlignment(SwingConstants.CENTER);
+		postuserfield.setBounds(218, 227, 114, 20);
+		add(postuserfield);
+		postuserfield.setColumns(10);
+		
+		postcontentfield = new JTextField();
+		postcontentfield.setHorizontalAlignment(SwingConstants.CENTER);
+		postcontentfield.setBounds(344, 199, 364, 78);
+		add(postcontentfield);
+		postcontentfield.setColumns(10);
+		
+		pollabel = new JLabel("Polarity");
+		pollabel.setHorizontalAlignment(SwingConstants.CENTER);
+		pollabel.setBounds(20, 173, 55, 16);
+		add(pollabel);
+		
+		idlabel = new JLabel("ID");
+		idlabel.setHorizontalAlignment(SwingConstants.CENTER);
+		idlabel.setBounds(92, 173, 114, 16);
+		add(idlabel);
+		
+		userlabel = new JLabel("User");
+		userlabel.setHorizontalAlignment(SwingConstants.CENTER);
+		userlabel.setBounds(218, 173, 114, 16);
+		add(userlabel);
+		
+		contentlabel = new JLabel("Content");
+		contentlabel.setHorizontalAlignment(SwingConstants.CENTER);
+		contentlabel.setBounds(344, 173, 364, 16);
+		add(contentlabel);
 
 		//Initialize predict elements
 		
@@ -227,8 +328,21 @@ public class MainPanel extends JPanel{
 		corepredictbutton.setVisible(false);
 		corerefreshbutton.setVisible(false);
 		titlebanner.setText("JTwitter");
-		corelist.setVisible(false);
-		corescrollpane.setVisible(false);
+		tweetlist.setVisible(false);
+		tweetscrollpane.setVisible(false);
+		
+		postposterbutton.setVisible(false);
+		genIDcheckbox.setVisible(false);
+		pol2radio.setVisible(false);
+		pol4radio.setVisible(false);
+		pol0radio.setVisible(false);
+		postIDfield.setVisible(false);
+		postuserfield.setVisible(false);
+		postcontentfield.setVisible(false);
+		pollabel.setVisible(false);
+		idlabel.setVisible(false);
+		userlabel.setVisible(false);
+		contentlabel.setVisible(false);
 	}
 	public void toCore(String username) {
 		coreTweets(loginunametf.getText());
@@ -245,26 +359,39 @@ public class MainPanel extends JPanel{
 		coresearchbutton.setVisible(true);
 		corepostbutton.setVisible(true);
 		corepredictbutton.setVisible(true);
-		corelist.setVisible(true);
-		corescrollpane.setVisible(true);
+		tweetlist.setVisible(true);
+		tweetscrollpane.setVisible(true);
+		
+		postposterbutton.setVisible(false);
+		genIDcheckbox.setVisible(false);
+		pol2radio.setVisible(false);
+		pol4radio.setVisible(false);
+		pol0radio.setVisible(false);
+		postIDfield.setVisible(false);
+		postuserfield.setVisible(false);
+		postcontentfield.setVisible(false);
+		pollabel.setVisible(false);
+		idlabel.setVisible(false);
+		userlabel.setVisible(false);
+		contentlabel.setVisible(false);
 	}
 	public void coreTweets(String user) {
 		if (user.equals("Username")){
-			coremodel.removeAllElements();
+			tweetmodel.removeAllElements();
 			titlebanner.setText("Random Tweets");
 			for (int i = 0; i < 30; i++) {
 				Tweet randtweet = tweets.randomTweet();
-				coremodel.addElement(randtweet.toString());
+				tweetmodel.addElement(randtweet.toString());
 			}
 			corerefreshbutton.setVisible(true);
 
 		}
 		else {
-			coremodel.removeAllElements();
+			tweetmodel.removeAllElements();
 			titlebanner.setText("My Tweets");
 			ArrayList<Tweet> utweets = tweets.searchByUser(user);
 			for (Tweet utweet : utweets) {
-				coremodel.addElement(utweet.toString());
+				tweetmodel.addElement(utweet.toString());
 			}
 			corerefreshbutton.setVisible(false);
 
@@ -273,7 +400,7 @@ public class MainPanel extends JPanel{
 	}
 	
 	public void toSearch(String username) {
-		coremodel.removeAllElements();
+		tweetmodel.removeAllElements();
 		titlebanner.setText("Search");
 		backbutton.setVisible(true);
 
@@ -293,22 +420,35 @@ public class MainPanel extends JPanel{
 		corepostbutton.setVisible(false);
 		corepredictbutton.setVisible(false);
 		corerefreshbutton.setVisible(false);
-		corelist.setVisible(true);
-		corescrollpane.setVisible(true);
+		tweetlist.setVisible(true);
+		tweetscrollpane.setVisible(true);
+		
+		postposterbutton.setVisible(false);
+		genIDcheckbox.setVisible(false);
+		pol2radio.setVisible(false);
+		pol4radio.setVisible(false);
+		pol0radio.setVisible(false);
+		postIDfield.setVisible(false);
+		postuserfield.setVisible(false);
+		postcontentfield.setVisible(false);
+		pollabel.setVisible(false);
+		idlabel.setVisible(false);
+		userlabel.setVisible(false);
+		contentlabel.setVisible(false);
 	}
 	
 	public void search(String query) {
-		coremodel.removeAllElements();
+		tweetmodel.removeAllElements();
 		//Searching by ID
 		if (searchoptioncombobox.getSelectedIndex() == 0) {
 			int tweetid = Integer.parseInt(query);
-			coremodel.addElement(tweets.searchByID(tweetid).toString());
+			tweetmodel.addElement(tweets.searchByID(tweetid).toString());
 		}
 		//Searching by user
 		else {
 			ArrayList<Tweet> utweets = tweets.searchByUser(query);
 			for (Tweet utweet : utweets) {
-				coremodel.addElement(utweet.toString());
+				tweetmodel.addElement(utweet.toString());
 			}
 		}
 	}
@@ -320,6 +460,7 @@ public class MainPanel extends JPanel{
 	}
 	
 	public void toPost(String username) {
+		pol2radio.setSelected(true);
 		titlebanner.setText("Post");
 		backbutton.setVisible(true);
 		
@@ -337,10 +478,44 @@ public class MainPanel extends JPanel{
 		corepostbutton.setVisible(false);
 		corepredictbutton.setVisible(false);
 		corerefreshbutton.setVisible(false);
-		corelist.setVisible(false);
-		corescrollpane.setVisible(false);
+		tweetlist.setVisible(false);
+		tweetscrollpane.setVisible(false);
+		
+		postposterbutton.setVisible(true);
+		genIDcheckbox.setVisible(true);
+		pol2radio.setVisible(true);
+		pol4radio.setVisible(true);
+		pol0radio.setVisible(true);
+		postIDfield.setVisible(true);
+		postuserfield.setVisible(true);
+		postcontentfield.setVisible(true);
+		pollabel.setVisible(true);
+		idlabel.setVisible(true);
+		userlabel.setVisible(true);
+		contentlabel.setVisible(true);
 
 	}
+	
+	public void post() {
+		int polarity;
+		if (polarities.getSelection() == pol2radio) {
+			polarity = 2;
+		}
+		else if (polarities.getSelection() == pol0radio) {
+			polarity = 0;
+		}
+		else polarity = 4;
+		Long ID = Long.parseLong(postIDfield.getText());
+		String user = postuserfield.getText();
+		String content = postcontentfield.getText();
+		tweets.addTweet(new Tweet(polarity, ID, user, content));
+		postIDfield.setText("");
+		postuserfield.setText("");
+		postcontentfield.setText("");
+		pol2radio.setSelected(true);
+		
+	}
+	
 	public void toPredict(String username) {
 		titlebanner.setText("Predict");
 		backbutton.setVisible(true);
@@ -359,8 +534,21 @@ public class MainPanel extends JPanel{
 		corepostbutton.setVisible(false);
 		corepredictbutton.setVisible(false);
 		corerefreshbutton.setVisible(false);
-		corelist.setVisible(false);
-		corescrollpane.setVisible(false);
+		tweetlist.setVisible(false);
+		tweetscrollpane.setVisible(false);
+		
+		postposterbutton.setVisible(false);
+		genIDcheckbox.setVisible(false);
+		pol2radio.setVisible(false);
+		pol4radio.setVisible(false);
+		pol0radio.setVisible(false);
+		postIDfield.setVisible(false);
+		postuserfield.setVisible(false);
+		postcontentfield.setVisible(false);
+		pollabel.setVisible(false);
+		idlabel.setVisible(false);
+		userlabel.setVisible(false);
+		contentlabel.setVisible(false);
 
 	}
 }
