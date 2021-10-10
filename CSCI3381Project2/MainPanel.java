@@ -55,7 +55,7 @@ public class MainPanel extends JPanel{
 		loginanonbutton.setBounds(300, 367, 120, 30);
 		loginanonbutton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				toCore("Username");
+				toCore(loginunametf.getText());
 				}
 			}
 		);
@@ -187,6 +187,7 @@ public class MainPanel extends JPanel{
 		corescrollpane.setVisible(false);
 	}
 	public void toCore(String username) {
+		coreTweets(loginunametf.getText());
 		loginunametf.setVisible(false);
 		logintitlebanner.setVisible(false);
 		loginanonbutton.setVisible(false);
@@ -196,7 +197,6 @@ public class MainPanel extends JPanel{
 		coresearchbutton.setVisible(true);
 		corepostbutton.setVisible(true);
 		corepredictbutton.setVisible(true);
-		corerefreshbutton.setVisible(true);
 		coretitlebanner.setVisible(true);
 		corelist.setVisible(true);
 		corescrollpane.setVisible(true);
@@ -209,6 +209,8 @@ public class MainPanel extends JPanel{
 				Tweet randtweet = tweets.randomTweet();
 				coremodel.addElement(randtweet.toString());
 			}
+			corerefreshbutton.setVisible(true);
+
 		}
 		else {
 			coremodel.removeAllElements();
@@ -217,6 +219,7 @@ public class MainPanel extends JPanel{
 			for (Tweet utweet : utweets) {
 				coremodel.addElement(utweet.toString());
 			}
+			corerefreshbutton.setVisible(false);
 
 		}
 		
