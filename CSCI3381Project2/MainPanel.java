@@ -6,12 +6,14 @@ import javax.swing.SwingConstants;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import CSCI3381Project1.*;
 import javax.swing.JRadioButton;
@@ -20,16 +22,21 @@ import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
+import javax.swing.JSlider;
+import javax.swing.JSpinner;
+import javax.swing.JToggleButton;
 
 public class MainPanel extends JPanel{
 	
 	//Global/shared elements
 	private TweetCollection tweets;
+	private TweetCollection testing;
 	private JTextField titlebanner;
 	private JButton backbutton;
 	private JScrollPane tweetscrollpane;
 	private DefaultListModel<String> tweetmodel;
 	private JList<String> tweetlist;
+	private HashMap<String, ArrayList<Integer>> testData;
 	
 	//Login elements
 	private JTextField loginunametf;
@@ -40,16 +47,18 @@ public class MainPanel extends JPanel{
 	private JButton corebackbutton;
 	private JButton coresearchbutton;
 	private JButton corepostbutton;
-	private JButton corepredictbutton;
 	private JButton corerefreshbutton;
+	private JLabel coreloginnotif;
+	private JLabel coreloginval;
 
 	//Search elements
 	private JTextField searchfield;
 	private JButton deletetweetbutton;
 	private JButton searcherbutton;
 	private JComboBox<String> searchoptioncombobox;
+	private JButton predictionbutton;
+	private JToggleButton predicttypebutton;
 
-	
 	//Post elements
 	private JButton postposterbutton;
 	private JCheckBox genIDcheckbox;
@@ -65,12 +74,11 @@ public class MainPanel extends JPanel{
 	private JLabel userlabel;
 	private JLabel contentlabel;
 
-
-	//Predict elements
-
 	//Initialize ALL elements in constructor, but only set login elements to be visible by calling toLogin() at the end
 	public MainPanel() {
 		tweets = new TweetCollection("./CSCI3381Project1/trainingProcessed.txt");
+		testData = tweets.createPredictionData();
+		testing = new TweetCollection("./CSCI3381Project1/testProcessed.txt");
 		setBackground(Color.LIGHT_GRAY);
 		setLayout(null);
 		
@@ -149,16 +157,6 @@ public class MainPanel extends JPanel{
 			}
 		);
 		add(corepostbutton);
-		corepredictbutton = new JButton("Predict");
-		corepredictbutton.setFont(new Font("Source Serif Pro", Font.PLAIN, 15));
-		corepredictbutton.setBounds(20, 290, 120, 60);
-		corepredictbutton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				toPredict(loginunametf.getText());
-				}
-			}
-		);
-		add(corepredictbutton);
 		corerefreshbutton = new JButton("Refresh");
 		corerefreshbutton.setFont(new Font("Source Serif Pro", Font.PLAIN, 10));
 		corerefreshbutton.setBounds(630, 400, 70, 30);
@@ -169,6 +167,18 @@ public class MainPanel extends JPanel{
 			}
 		);
 		add(corerefreshbutton);
+		
+		coreloginnotif = new JLabel("Logged In As:");
+		coreloginnotif.setHorizontalAlignment(SwingConstants.CENTER);
+		coreloginnotif.setFont(new Font("Source Serif Pro", Font.PLAIN, 12));
+		coreloginnotif.setBounds(20, 300, 120, 20);
+		add(coreloginnotif);
+		
+		coreloginval = new JLabel("Anonymous");
+		coreloginval.setHorizontalAlignment(SwingConstants.CENTER);
+		coreloginval.setFont(new Font("Source Serif Pro", Font.PLAIN, 12));
+		coreloginval.setBounds(20, 320, 120, 20);
+		add(coreloginval);
 		
 		tweetmodel = new DefaultListModel<String>();
 		tweetlist = new JList<String>(tweetmodel);
@@ -188,7 +198,6 @@ public class MainPanel extends JPanel{
 			}
 		);
 		add(backbutton);
-		
 		
 		searchfield = new JTextField();
 		searchfield.setHorizontalAlignment(SwingConstants.CENTER);
@@ -212,7 +221,7 @@ public class MainPanel extends JPanel{
 		add(searchoptioncombobox);
 		
 		deletetweetbutton = new JButton("Delete");
-		deletetweetbutton.setBounds(400, 401, 98, 26);
+		deletetweetbutton.setBounds(200, 401, 98, 26);
 		deletetweetbutton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				delete(tweetlist.getSelectedValue());
@@ -220,6 +229,29 @@ public class MainPanel extends JPanel{
 			}
 		);
 		add(deletetweetbutton);
+		
+		predictionbutton = new JButton("Predict");
+		predictionbutton.setBounds(602, 401, 98, 26);
+		predictionbutton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				predict();
+				}
+			}
+		);
+		add(predictionbutton);
+		
+		predicttypebutton = new JToggleButton("Chosen Tweet");
+		predicttypebutton.setBounds(454, 401, 136, 26);
+		predicttypebutton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (predicttypebutton.isSelected())
+				{
+					predicttypebutton.setText("All Training Data");
+				}
+				else predicttypebutton.setText("Chosen Tweet");
+			}
+		});
+		add(predicttypebutton);
 		
 		//Initialized post elements
 		postposterbutton = new JButton("Post");
@@ -281,7 +313,7 @@ public class MainPanel extends JPanel{
 		
 		postcontentfield = new JTextField();
 		postcontentfield.setHorizontalAlignment(SwingConstants.CENTER);
-		postcontentfield.setBounds(344, 199, 364, 78);
+		postcontentfield.setBounds(344, 199, 356, 78);
 		add(postcontentfield);
 		postcontentfield.setColumns(10);
 		
@@ -304,8 +336,6 @@ public class MainPanel extends JPanel{
 		contentlabel.setHorizontalAlignment(SwingConstants.CENTER);
 		contentlabel.setBounds(344, 173, 364, 16);
 		add(contentlabel);
-
-		//Initialize predict elements
 		
 		//Always start at login screen
 		toLogin();
@@ -321,11 +351,14 @@ public class MainPanel extends JPanel{
 		deletetweetbutton.setVisible(false);
 		searcherbutton.setVisible(false);
 		searchoptioncombobox.setVisible(false);
+		predictionbutton.setVisible(false);
+		predicttypebutton.setVisible(false);
 		
 		corebackbutton.setVisible(false);
 		coresearchbutton.setVisible(false);
 		corepostbutton.setVisible(false);
-		corepredictbutton.setVisible(false);
+		coreloginnotif.setVisible(false);
+		coreloginval.setVisible(false);
 		corerefreshbutton.setVisible(false);
 		titlebanner.setText("JTwitter");
 		tweetlist.setVisible(false);
@@ -343,8 +376,17 @@ public class MainPanel extends JPanel{
 		idlabel.setVisible(false);
 		userlabel.setVisible(false);
 		contentlabel.setVisible(false);
+
 	}
 	public void toCore(String username) {
+		if (username.equals("")) {
+			coreloginval.setText("Anonymous");
+			loginunametf.setText("Username");
+		}
+		else if (username.equals("Username")) {
+			coreloginval.setText("Anonymous");
+		}
+		else coreloginval.setText(username);
 		coreTweets(loginunametf.getText());
 		loginunametf.setVisible(false);
 		loginanonbutton.setVisible(false);
@@ -354,11 +396,14 @@ public class MainPanel extends JPanel{
 		deletetweetbutton.setVisible(false);
 		searcherbutton.setVisible(false);
 		searchoptioncombobox.setVisible(false);
+		predictionbutton.setVisible(false);
+		predicttypebutton.setVisible(false);
 		
 		corebackbutton.setVisible(true);
 		coresearchbutton.setVisible(true);
 		corepostbutton.setVisible(true);
-		corepredictbutton.setVisible(true);
+		coreloginnotif.setVisible(true);
+		coreloginval.setVisible(true);
 		tweetlist.setVisible(true);
 		tweetscrollpane.setVisible(true);
 		
@@ -413,12 +458,15 @@ public class MainPanel extends JPanel{
 		deletetweetbutton.setVisible(true);
 		searcherbutton.setVisible(true);
 		searchoptioncombobox.setVisible(true);
+		predictionbutton.setVisible(true);
+		predicttypebutton.setVisible(true);
 		searchoptioncombobox.setSelectedIndex(1);
 		
 		corebackbutton.setVisible(false);
 		coresearchbutton.setVisible(false);
 		corepostbutton.setVisible(false);
-		corepredictbutton.setVisible(false);
+		coreloginnotif.setVisible(false);
+		coreloginval.setVisible(false);
 		corerefreshbutton.setVisible(false);
 		tweetlist.setVisible(true);
 		tweetscrollpane.setVisible(true);
@@ -459,7 +507,28 @@ public class MainPanel extends JPanel{
 		search(searchfield.getText());
 	}
 	
+	public void predict() {
+		//Option to test on all training data is chosen
+		if (predicttypebutton.isSelected())
+		{
+			tweetmodel.removeAllElements();
+			String[] results = testing.judgeAccuracy(testData);
+			for (String result: results) {
+				tweetmodel.addElement(result);
+			}
+		}
+		//Option to test on chosen tweet is chosen
+		else {
+			String tweetstring = tweetlist.getSelectedValue();
+			String[] stuff = tweetstring.split(",");
+			Tweet tweet = new Tweet(Integer.parseInt(stuff[0]), Long.parseLong(stuff[1]), stuff[2], stuff[3]);
+			int polguess = tweets.predict(tweet, testData);
+			JOptionPane.showMessageDialog(getParent(), "Predicted a polarity of " + polguess + " for chosen tweet.");
+		}
+	}
+	
 	public void toPost(String username) {
+		postuserfield.setText(loginunametf.getText());
 		pol2radio.setSelected(true);
 		titlebanner.setText("Post");
 		backbutton.setVisible(true);
@@ -472,11 +541,14 @@ public class MainPanel extends JPanel{
 		deletetweetbutton.setVisible(false);
 		searcherbutton.setVisible(false);
 		searchoptioncombobox.setVisible(false);
+		predictionbutton.setVisible(false);
+		predicttypebutton.setVisible(false);
 		
 		corebackbutton.setVisible(false);
 		coresearchbutton.setVisible(false);
 		corepostbutton.setVisible(false);
-		corepredictbutton.setVisible(false);
+		coreloginnotif.setVisible(false);
+		coreloginval.setVisible(false);
 		corerefreshbutton.setVisible(false);
 		tweetlist.setVisible(false);
 		tweetscrollpane.setVisible(false);
@@ -514,42 +586,6 @@ public class MainPanel extends JPanel{
 		postcontentfield.setText("");
 		pol2radio.setSelected(true);
 		
-	}
-	
-	public void toPredict(String username) {
-		titlebanner.setText("Predict");
-		backbutton.setVisible(true);
-		
-		loginunametf.setVisible(false);
-		loginanonbutton.setVisible(false);
-		loginuserbutton.setVisible(false);
-		
-		searchfield.setVisible(false);
-		deletetweetbutton.setVisible(false);
-		searcherbutton.setVisible(false);
-		searchoptioncombobox.setVisible(false);
-		
-		corebackbutton.setVisible(false);
-		coresearchbutton.setVisible(false);
-		corepostbutton.setVisible(false);
-		corepredictbutton.setVisible(false);
-		corerefreshbutton.setVisible(false);
-		tweetlist.setVisible(false);
-		tweetscrollpane.setVisible(false);
-		
-		postposterbutton.setVisible(false);
-		genIDcheckbox.setVisible(false);
-		pol2radio.setVisible(false);
-		pol4radio.setVisible(false);
-		pol0radio.setVisible(false);
-		postIDfield.setVisible(false);
-		postuserfield.setVisible(false);
-		postcontentfield.setVisible(false);
-		pollabel.setVisible(false);
-		idlabel.setVisible(false);
-		userlabel.setVisible(false);
-		contentlabel.setVisible(false);
-
 	}
 }
 	

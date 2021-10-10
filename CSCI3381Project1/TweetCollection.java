@@ -266,7 +266,7 @@ public class TweetCollection {
 	
 	//Given the prediction data, judge the overall accuracy of the prediction methodology by testing predict on every tweet and tallying correct/incorrect guesses
 	//Return a string containing the % accuracy, as well as the raw values and a breakdown by polarity
-	public String judgeAccuracy(HashMap<String, ArrayList<Integer>> predictionData) {
+	public String[] judgeAccuracy(HashMap<String, ArrayList<Integer>> predictionData) {
 		int negativeguess = 0;
 		int neutralguess = 0;
 		int positiveguess = 0;
@@ -301,11 +301,10 @@ public class TweetCollection {
 				incorrect++;
 			}
 		}
-		String toreturn = "";
-		toreturn += "\nOverall model prediction accuracy: " + correct + " correct, " + incorrect + " incorrect, " + ((double)correct/((double)(incorrect + correct))) * 100 + " % accuracy";
-		toreturn += "\n\tPolarity 4 Tweets: " + positiveguess + " guessed, " + positivereal + " actual";
-		toreturn += "\n\tPolarity 2 Tweets: " + neutralguess + " guessed, " + neutralreal + " actual";
-		toreturn += "\n\tPolarity 0 Tweets: " + negativeguess + " guessed, " + negativereal + " actual";
+		String[] toreturn = {"Overall model accuracy: " + correct + " correct, " + incorrect + " incorrect, " + ((double)correct/((double)(incorrect + correct))) * 100 + " % accuracy",
+				"***** Polarity 4 Tweets: " + positiveguess + " guessed, " + positivereal + " actual",
+				"***** Polarity 2 Tweets: " + neutralguess + " guessed, " + neutralreal + " actual",
+				"***** Polarity 0 Tweets: " + negativeguess + " guessed, " + negativereal + " actual"};
 		return toreturn;
 	}
 	
