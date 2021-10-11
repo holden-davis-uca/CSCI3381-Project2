@@ -22,8 +22,6 @@ import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
-import javax.swing.JSlider;
-import javax.swing.JSpinner;
 import javax.swing.JToggleButton;
 
 public class MainPanel extends JPanel{
@@ -85,10 +83,10 @@ public class MainPanel extends JPanel{
 		//Initialize Login Elements
 		loginanonbutton = new JButton("Anonymous Login");
 		loginanonbutton.setFont(new Font("Source Serif Pro", Font.PLAIN, 10));
-		loginanonbutton.setBounds(300, 367, 120, 30);
+		loginanonbutton.setBounds(300, 370, 120, 30);
 		loginanonbutton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				toCore(loginunametf.getText());
+				toCore("Username");
 				}
 			}
 		);
@@ -96,7 +94,7 @@ public class MainPanel extends JPanel{
 		
 		loginunametf = new JTextField();
 		loginunametf.setFont(new Font("Source Serif Pro", Font.PLAIN, 10));
-		loginunametf.setBounds(300, 177, 120, 30);
+		loginunametf.setBounds(300, 180, 120, 30);
 		loginunametf.setHorizontalAlignment(SwingConstants.CENTER);
 		loginunametf.setText("Username");
 		loginunametf.setToolTipText("Enter Username");
@@ -105,7 +103,7 @@ public class MainPanel extends JPanel{
 		
 		loginuserbutton = new JButton("Login as User");
 		loginuserbutton.setFont(new Font("Source Serif Pro", Font.PLAIN, 10));
-		loginuserbutton.setBounds(300, 208, 120, 30);
+		loginuserbutton.setBounds(300, 210, 120, 30);
 		loginuserbutton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				toCore(loginunametf.getText());
@@ -149,7 +147,7 @@ public class MainPanel extends JPanel{
 		add(coresearchbutton);
 		corepostbutton = new JButton("Post");
 		corepostbutton.setFont(new Font("Source Serif Pro", Font.PLAIN, 15));
-		corepostbutton.setBounds(20, 193, 120, 60);
+		corepostbutton.setBounds(20, 190, 120, 60);
 		corepostbutton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				toPost(loginunametf.getText());
@@ -201,7 +199,7 @@ public class MainPanel extends JPanel{
 		
 		searchfield = new JTextField();
 		searchfield.setHorizontalAlignment(SwingConstants.CENTER);
-		searchfield.setBounds(20, 193, 120, 60);
+		searchfield.setBounds(20, 190, 120, 60);
 		add(searchfield);
 		searchfield.setColumns(10);
 		
@@ -221,7 +219,7 @@ public class MainPanel extends JPanel{
 		add(searchoptioncombobox);
 		
 		deletetweetbutton = new JButton("Delete");
-		deletetweetbutton.setBounds(200, 401, 98, 26);
+		deletetweetbutton.setBounds(200, 400, 100, 30);
 		deletetweetbutton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				delete(tweetlist.getSelectedValue());
@@ -231,7 +229,7 @@ public class MainPanel extends JPanel{
 		add(deletetweetbutton);
 		
 		predictionbutton = new JButton("Predict");
-		predictionbutton.setBounds(602, 401, 98, 26);
+		predictionbutton.setBounds(600, 400, 100, 30);
 		predictionbutton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				predict();
@@ -241,7 +239,7 @@ public class MainPanel extends JPanel{
 		add(predictionbutton);
 		
 		predicttypebutton = new JToggleButton("Chosen Tweet");
-		predicttypebutton.setBounds(454, 401, 136, 26);
+		predicttypebutton.setBounds(450, 400, 140, 30);
 		predicttypebutton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (predicttypebutton.isSelected())
@@ -253,9 +251,9 @@ public class MainPanel extends JPanel{
 		});
 		add(predicttypebutton);
 		
-		//Initialized post elements
+		//Initialize post elements
 		postposterbutton = new JButton("Post");
-		postposterbutton.setBounds(344, 401, 98, 26);
+		postposterbutton.setBounds(340, 400, 100, 30);
 		postposterbutton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				post();
@@ -266,7 +264,7 @@ public class MainPanel extends JPanel{
 		
 		genIDcheckbox = new JCheckBox("Auto Generate ID");
 		genIDcheckbox.setHorizontalAlignment(SwingConstants.CENTER);
-		genIDcheckbox.setBounds(204, 402, 128, 24);
+		genIDcheckbox.setBounds(200, 400, 130, 20);
 		genIDcheckbox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (genIDcheckbox.isSelected()) {
@@ -301,40 +299,40 @@ public class MainPanel extends JPanel{
 		
 		postIDfield = new JTextField();
 		postIDfield.setHorizontalAlignment(SwingConstants.CENTER);
-		postIDfield.setBounds(92, 227, 114, 20);
+		postIDfield.setBounds(90, 230, 120, 20);
 		add(postIDfield);
 		postIDfield.setColumns(10);
 		
 		postuserfield = new JTextField();
 		postuserfield.setHorizontalAlignment(SwingConstants.CENTER);
-		postuserfield.setBounds(218, 227, 114, 20);
+		postuserfield.setBounds(220, 230, 120, 20);
 		add(postuserfield);
 		postuserfield.setColumns(10);
 		
 		postcontentfield = new JTextField();
 		postcontentfield.setHorizontalAlignment(SwingConstants.CENTER);
-		postcontentfield.setBounds(344, 199, 356, 78);
+		postcontentfield.setBounds(340, 200, 360, 80);
 		add(postcontentfield);
 		postcontentfield.setColumns(10);
 		
 		pollabel = new JLabel("Polarity");
 		pollabel.setHorizontalAlignment(SwingConstants.CENTER);
-		pollabel.setBounds(20, 173, 55, 16);
+		pollabel.setBounds(20, 170, 60, 20);
 		add(pollabel);
 		
 		idlabel = new JLabel("ID");
 		idlabel.setHorizontalAlignment(SwingConstants.CENTER);
-		idlabel.setBounds(92, 173, 114, 16);
+		idlabel.setBounds(90, 170, 120, 20);
 		add(idlabel);
 		
 		userlabel = new JLabel("User");
 		userlabel.setHorizontalAlignment(SwingConstants.CENTER);
-		userlabel.setBounds(218, 173, 114, 16);
+		userlabel.setBounds(220, 170, 120, 20);
 		add(userlabel);
 		
 		contentlabel = new JLabel("Content");
 		contentlabel.setHorizontalAlignment(SwingConstants.CENTER);
-		contentlabel.setBounds(344, 173, 364, 16);
+		contentlabel.setBounds(340, 170, 360, 20);
 		add(contentlabel);
 		
 		//Always start at login screen
@@ -343,6 +341,8 @@ public class MainPanel extends JPanel{
 	}
 
 	public void toLogin() {
+		titlebanner.setText("JTwitter");
+		
 		loginunametf.setVisible(true);
 		loginanonbutton.setVisible(true);
 		loginuserbutton.setVisible(true);
@@ -354,16 +354,16 @@ public class MainPanel extends JPanel{
 		predictionbutton.setVisible(false);
 		predicttypebutton.setVisible(false);
 		
+		backbutton.setVisible(false);
 		corebackbutton.setVisible(false);
 		coresearchbutton.setVisible(false);
 		corepostbutton.setVisible(false);
 		coreloginnotif.setVisible(false);
 		coreloginval.setVisible(false);
 		corerefreshbutton.setVisible(false);
-		titlebanner.setText("JTwitter");
+
 		tweetlist.setVisible(false);
 		tweetscrollpane.setVisible(false);
-		
 		postposterbutton.setVisible(false);
 		genIDcheckbox.setVisible(false);
 		pol2radio.setVisible(false);
@@ -388,6 +388,8 @@ public class MainPanel extends JPanel{
 		}
 		else coreloginval.setText(username);
 		coreTweets(loginunametf.getText());
+		
+		
 		loginunametf.setVisible(false);
 		loginanonbutton.setVisible(false);
 		loginuserbutton.setVisible(false);
@@ -446,21 +448,17 @@ public class MainPanel extends JPanel{
 	
 	public void toSearch(String username) {
 		tweetmodel.removeAllElements();
-		titlebanner.setText("Search");
-		backbutton.setVisible(true);
-
-		loginunametf.setVisible(false);
-		loginanonbutton.setVisible(false);
-		loginuserbutton.setVisible(false);
-		
-		searchfield.setVisible(true);
 		searchfield.setText(loginunametf.getText());
+		searchoptioncombobox.setSelectedIndex(1);
+		titlebanner.setText("Search");
+		
+		backbutton.setVisible(true);		
+		searchfield.setVisible(true);
 		deletetweetbutton.setVisible(true);
 		searcherbutton.setVisible(true);
 		searchoptioncombobox.setVisible(true);
 		predictionbutton.setVisible(true);
 		predicttypebutton.setVisible(true);
-		searchoptioncombobox.setSelectedIndex(1);
 		
 		corebackbutton.setVisible(false);
 		coresearchbutton.setVisible(false);
@@ -531,12 +529,8 @@ public class MainPanel extends JPanel{
 		postuserfield.setText(loginunametf.getText());
 		pol2radio.setSelected(true);
 		titlebanner.setText("Post");
+		
 		backbutton.setVisible(true);
-		
-		loginunametf.setVisible(false);
-		loginanonbutton.setVisible(false);
-		loginuserbutton.setVisible(false);
-		
 		searchfield.setVisible(false);
 		deletetweetbutton.setVisible(false);
 		searcherbutton.setVisible(false);
@@ -584,7 +578,7 @@ public class MainPanel extends JPanel{
 		postIDfield.setText("");
 		postuserfield.setText("");
 		postcontentfield.setText("");
-		pol2radio.setSelected(true);
+		pol2radio.setSelected(false);
 		
 	}
 }
