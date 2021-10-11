@@ -1,3 +1,7 @@
+//Holden Davis
+//CSCI 3381 - CRN 18741
+//Project 2 - Dr. Doderer - Fall 2021
+
 package CSCI3381Project1;
 
 public class Tweet {

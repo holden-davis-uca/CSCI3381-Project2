@@ -1,3 +1,7 @@
+//Holden Davis
+//CSCI 3381 - CRN 18741
+//Project 2 - Dr. Doderer - Fall 2021
+
 package CSCI3381Project2;
 
 import javax.swing.JPanel;
@@ -78,9 +82,14 @@ public class MainPanel extends JPanel{
 
 	//Initialize ALL elements in constructor, but only set login elements to be visible by calling toLogin() at the end
 	public MainPanel() {
+		//Testing Configuration
 		datainFile = "./CSCI3381Project1/trainingProcessed.txt";
 		testinFile = "./CSCI3381Project1/testProcessed.txt";
 		dataOutFile = "./CSCI3381Project1/out.txt";
+		//Production Configuration
+//		datainFile = "./CSCI3381Project1/trainingProcessed.txt";
+//		testinFile = "./CSCI3381Project1/testProcessed.txt";
+//		dataOutFile = "./CSCI3381Project1/trainingProcessed.txt";
 		tweets = new TweetCollection(datainFile);
 		testData = tweets.createPredictionData();
 		testing = new TweetCollection(testinFile);
