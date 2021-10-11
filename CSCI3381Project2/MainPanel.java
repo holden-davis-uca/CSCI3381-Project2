@@ -93,7 +93,7 @@ public class MainPanel extends JPanel{
 		tweets = new TweetCollection(datainFile);
 		testData = tweets.createPredictionData();
 		testing = new TweetCollection(testinFile);
-		setBackground(Color.LIGHT_GRAY);
+		setBackground(new Color(29, 161, 242));
 		setLayout(null);
 		
 		//Initialize Login Elements
@@ -132,7 +132,7 @@ public class MainPanel extends JPanel{
 		titlebanner.setEditable(false);
 		titlebanner.setForeground(Color.WHITE);
 		titlebanner.setFont(new Font("Consolas", Font.BOLD | Font.ITALIC, 20));
-		titlebanner.setBackground(Color.DARK_GRAY);
+		titlebanner.setBackground(new Color(20,23,26));
 		titlebanner.setHorizontalAlignment(SwingConstants.CENTER);
 		titlebanner.setText("JTwitter");
 		titlebanner.setBounds(0, 30, 720, 40);
@@ -280,7 +280,7 @@ public class MainPanel extends JPanel{
 		
 		genIDcheckbox = new JCheckBox("Auto Generate ID");
 		genIDcheckbox.setHorizontalAlignment(SwingConstants.CENTER);
-		genIDcheckbox.setBounds(200, 400, 130, 20);
+		genIDcheckbox.setBounds(200, 400, 130, 30);
 		genIDcheckbox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (genIDcheckbox.isSelected()) {
