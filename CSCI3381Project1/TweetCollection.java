@@ -269,7 +269,7 @@ public class TweetCollection {
 	}
 	
 	//Given the prediction data, judge the overall accuracy of the prediction methodology by testing predict on every tweet and tallying correct/incorrect guesses
-	//Return a string containing the % accuracy, as well as the raw values and a breakdown by polarity
+	//Return a string array containing the % accuracy, as well as the raw values and a breakdown by polarity
 	public String[] judgeAccuracy(HashMap<String, ArrayList<Integer>> predictionData) {
 		int negativeguess = 0;
 		int neutralguess = 0;

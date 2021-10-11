@@ -10,6 +10,7 @@ import java.util.HashMap;
 
 public class Tester {
 	
+	//Simple utility function to test for existence of source file
 	public boolean testInFile() {
 			File tfile = new File("./CSCI3381Project1/trainingProcessed.txt");
 			if (tfile.exists() == true) {
@@ -18,6 +19,7 @@ public class Tester {
 			else return false;
 	}
 	
+	//Tests all functions (main from project 1)
 	public void testAll() {
 		
 		System.out.println("\n!---Starting---!\n");

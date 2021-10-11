@@ -355,7 +355,7 @@ public class MainPanel extends JPanel{
 		toLogin();
 		
 	}
-
+	//Go to Login screen: set all core, search, and post elements invisible, change banner text
 	public void toLogin() {
 		titlebanner.setText("JTwitter");
 		
@@ -394,6 +394,8 @@ public class MainPanel extends JPanel{
 		contentlabel.setVisible(false);
 
 	}
+	//Go to Core screen: set all login, search, and post elements invisible, change banner text
+	//Get tweets + change login notifier based on input from login screen
 	public void toCore(String username) {
 		if (username.equals("")) {
 			coreloginval.setText("Anonymous");
@@ -438,6 +440,8 @@ public class MainPanel extends JPanel{
 		userlabel.setVisible(false);
 		contentlabel.setVisible(false);
 	}
+	//Fill tweet list with tweets: random tweets in anonymous login, or user's tweets if logged in as a user
+	//Set refresh button to visible if logged in anonymously, will show new random tweets when pressed
 	public void coreTweets(String user) {
 		if (user.equals("Username")){
 			tweetmodel.removeAllElements();
@@ -461,7 +465,7 @@ public class MainPanel extends JPanel{
 		}
 		
 	}
-	
+	//Go to Search screen: set all core, login, and post elements invisible, change banner text
 	public void toSearch(String username) {
 		tweetmodel.removeAllElements();
 		searchfield.setText(loginunametf.getText());
@@ -498,7 +502,8 @@ public class MainPanel extends JPanel{
 		userlabel.setVisible(false);
 		contentlabel.setVisible(false);
 	}
-	
+	//Search for a tweet given the search type and ID/user
+	//Clear tweet list and add results to it
 	public void search(String query) {
 		tweetmodel.removeAllElements();
 		//Searching by ID
@@ -514,13 +519,15 @@ public class MainPanel extends JPanel{
 			}
 		}
 	}
-	
+	//Delete a tweet given the input toString representation of a tweet
+	//Also update the search results to reflect deletion
 	public void delete(String tweetstring) {
 		String[] stuff = tweetstring.split(",");
 		tweets.removeTweet(tweets.searchByID(Long.parseLong(stuff[1])));
 		search(searchfield.getText());
 	}
-	
+	//If singular tweet prediction (chosen from list), popup dialog box with prediction
+	//Otherwise, clear tweet list and add judgeAccuracy result
 	public void predict() {
 		//Option to test on all training data is chosen
 		if (predicttypebutton.isSelected())
@@ -540,7 +547,8 @@ public class MainPanel extends JPanel{
 			JOptionPane.showMessageDialog(getParent(), "Predicted a polarity of " + polguess + " for chosen tweet.");
 		}
 	}
-	
+	//Go to Post screen: set all core, search, and login elements invisible, change banner text
+	//Set post tweet polarity to 2 (in the middle) by default
 	public void toPost(String username) {
 		postuserfield.setText(loginunametf.getText());
 		pol2radio.setSelected(true);
@@ -577,7 +585,7 @@ public class MainPanel extends JPanel{
 		contentlabel.setVisible(true);
 
 	}
-	
+	//Add tweet from given contents, and clear all fields once added
 	public void post() {
 		int polarity;
 		if (polarities.getSelection() == pol2radio) {
@@ -597,7 +605,7 @@ public class MainPanel extends JPanel{
 		pol2radio.setSelected(false);
 		
 	}
-	
+	//To be automatically called by MainFrame when window is closed
 	public void writeOut() {
 		tweets.writeOut(dataOutFile);
 	}
