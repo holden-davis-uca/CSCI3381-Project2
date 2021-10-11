@@ -26,6 +26,10 @@ import javax.swing.JToggleButton;
 
 public class MainPanel extends JPanel{
 	
+	private String datainFile;
+	private String testinFile;
+	private String dataOutFile;
+	
 	//Global/shared elements
 	private TweetCollection tweets;
 	private TweetCollection testing;
@@ -74,9 +78,12 @@ public class MainPanel extends JPanel{
 
 	//Initialize ALL elements in constructor, but only set login elements to be visible by calling toLogin() at the end
 	public MainPanel() {
-		tweets = new TweetCollection("./CSCI3381Project1/trainingProcessed.txt");
+		datainFile = "./CSCI3381Project1/trainingProcessed.txt";
+		testinFile = "./CSCI3381Project1/testProcessed.txt";
+		dataOutFile = "./CSCI3381Project1/out.txt";
+		tweets = new TweetCollection(datainFile);
 		testData = tweets.createPredictionData();
-		testing = new TweetCollection("./CSCI3381Project1/testProcessed.txt");
+		testing = new TweetCollection(testinFile);
 		setBackground(Color.LIGHT_GRAY);
 		setLayout(null);
 		
@@ -580,6 +587,10 @@ public class MainPanel extends JPanel{
 		postcontentfield.setText("");
 		pol2radio.setSelected(false);
 		
+	}
+	
+	public void writeOut() {
+		tweets.writeOut(dataOutFile);
 	}
 }
 	
