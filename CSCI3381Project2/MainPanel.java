@@ -122,7 +122,10 @@ public class MainPanel extends JPanel{
 		loginuserbutton.setBounds(300, 210, 120, 30);
 		loginuserbutton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				toCore(loginunametf.getText());
+				if (tweets.searchByUser(loginunametf.getText()).size() == 0) {
+					JOptionPane.showMessageDialog(getParent(), "User does not exist!");
+				}
+				else toCore(loginunametf.getText());
 				}
 			}
 		);
@@ -176,7 +179,7 @@ public class MainPanel extends JPanel{
 		corerefreshbutton.setBounds(630, 400, 70, 30);
 		corerefreshbutton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				coreTweets(loginunametf.getText());
+				coreTweets("Username");
 				}
 			}
 		);
@@ -296,15 +299,15 @@ public class MainPanel extends JPanel{
 		);
 		add(genIDcheckbox);
 		
-		pol2radio = new JRadioButton("2");
+		pol2radio = new JRadioButton("2 :|");
 		pol2radio.setBounds(8, 225, 72, 24);
 		add(pol2radio);
 		
-		pol4radio = new JRadioButton("4");
+		pol4radio = new JRadioButton("4 :)");
 		pol4radio.setBounds(8, 197, 72, 24);
 		add(pol4radio);
 		
-		pol0radio = new JRadioButton("0");
+		pol0radio = new JRadioButton("0 :(");
 		pol0radio.setBounds(8, 253, 72, 24);
 		add(pol0radio);
 		
@@ -405,8 +408,7 @@ public class MainPanel extends JPanel{
 			coreloginval.setText("Anonymous");
 		}
 		else coreloginval.setText(username);
-		coreTweets(loginunametf.getText());
-		
+		coreTweets(username);
 		
 		loginunametf.setVisible(false);
 		loginanonbutton.setVisible(false);
@@ -471,6 +473,7 @@ public class MainPanel extends JPanel{
 		searchfield.setText(loginunametf.getText());
 		searchoptioncombobox.setSelectedIndex(1);
 		titlebanner.setText("Search");
+		search(username);
 		
 		backbutton.setVisible(true);		
 		searchfield.setVisible(true);
@@ -508,23 +511,43 @@ public class MainPanel extends JPanel{
 		tweetmodel.removeAllElements();
 		//Searching by ID
 		if (searchoptioncombobox.getSelectedIndex() == 0) {
-			int tweetid = Integer.parseInt(query);
-			tweetmodel.addElement(tweets.searchByID(tweetid).toString());
+			try {
+				int tweetid = Integer.parseInt(query);
+				if (tweets.searchByID(tweetid) == null)
+				{
+					JOptionPane.showMessageDialog(getParent(), "Tweet does not exist!");
+					searchfield.setText("");
+				}
+				else tweetmodel.addElement(tweets.searchByID(tweetid).toString());
+			} catch(Exception e) {
+				JOptionPane.showMessageDialog(getParent(), "Enter a valid ID!");
+				searchfield.setText("");
+			}
 		}
 		//Searching by user
 		else {
+			if (tweets.searchByUser(query).size() == 0) {
+				JOptionPane.showMessageDialog(getParent(), "User does not exist!");
+				searchfield.setText("");
+			}
+			else {
 			ArrayList<Tweet> utweets = tweets.searchByUser(query);
 			for (Tweet utweet : utweets) {
 				tweetmodel.addElement(utweet.toString());
+			}
 			}
 		}
 	}
 	//Delete a tweet given the input toString representation of a tweet
 	//Also update the search results to reflect deletion
 	public void delete(String tweetstring) {
-		String[] stuff = tweetstring.split(",");
-		tweets.removeTweet(tweets.searchByID(Long.parseLong(stuff[1])));
-		search(searchfield.getText());
+		try {
+			String[] stuff = tweetstring.split(",");
+			tweets.removeTweet(tweets.searchByID(Long.parseLong(stuff[1])));
+			search(searchfield.getText());
+		} catch(Exception e) {
+			JOptionPane.showMessageDialog(getParent(), "Choose a tweet to delete!");
+		}
 	}
 	//If singular tweet prediction (chosen from list), popup dialog box with prediction
 	//Otherwise, clear tweet list and add judgeAccuracy result
@@ -541,10 +564,14 @@ public class MainPanel extends JPanel{
 		//Option to test on chosen tweet is chosen
 		else {
 			String tweetstring = tweetlist.getSelectedValue();
-			String[] stuff = tweetstring.split(",");
-			Tweet tweet = new Tweet(Integer.parseInt(stuff[0]), Long.parseLong(stuff[1]), stuff[2], stuff[3]);
-			int polguess = tweets.predict(tweet, testData);
-			JOptionPane.showMessageDialog(getParent(), "Predicted a polarity of " + polguess + " for chosen tweet.");
+			try {
+				String[] stuff = tweetstring.split(",");
+				Tweet tweet = new Tweet(Integer.parseInt(stuff[0]), Long.parseLong(stuff[1]), stuff[2], stuff[3]);
+				int polguess = tweets.predict(tweet, testData);
+				JOptionPane.showMessageDialog(getParent(), "Predicted a polarity of " + polguess + " for chosen tweet.");
+			} catch(Exception e) {
+				JOptionPane.showMessageDialog(getParent(), "Choose a tweet to predict!");
+			}
 		}
 	}
 	//Go to Post screen: set all core, search, and login elements invisible, change banner text
@@ -587,23 +614,31 @@ public class MainPanel extends JPanel{
 	}
 	//Add tweet from given contents, and clear all fields once added
 	public void post() {
-		int polarity;
-		if (polarities.getSelection() == pol2radio) {
-			polarity = 2;
+		try {
+			int polarity;
+			if (polarities.getSelection() == pol2radio) {
+				polarity = 2;
+			}
+			else if (polarities.getSelection() == pol0radio) {
+				polarity = 0;
+			}
+			else polarity = 4;
+			Long ID = Long.parseLong(postIDfield.getText());
+			String user = postuserfield.getText();
+			String content = postcontentfield.getText();
+			if (ID != null && !user.equals("") && !content.equals("")) {
+				tweets.addTweet(new Tweet(polarity, ID, user, content));
+			}
+			else JOptionPane.showMessageDialog(getParent(), "Fill all fields to post a tweet!");
+			postIDfield.setText("");
+			postuserfield.setText("");
+			postcontentfield.setText("");
+			pol2radio.setSelected(false);
+			genIDcheckbox.setSelected(false);
+		} catch (Exception e)
+		{
+			JOptionPane.showMessageDialog(getParent(), "Enter a valid ID!");
 		}
-		else if (polarities.getSelection() == pol0radio) {
-			polarity = 0;
-		}
-		else polarity = 4;
-		Long ID = Long.parseLong(postIDfield.getText());
-		String user = postuserfield.getText();
-		String content = postcontentfield.getText();
-		tweets.addTweet(new Tweet(polarity, ID, user, content));
-		postIDfield.setText("");
-		postuserfield.setText("");
-		postcontentfield.setText("");
-		pol2radio.setSelected(false);
-		
 	}
 	//To be automatically called by MainFrame when window is closed
 	public void writeOut() {
