@@ -11,6 +11,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -311,6 +312,60 @@ public class TweetCollection {
 				"***** Polarity 0 Tweets: " + negativeguess + " guessed, " + negativereal + " actual"};
 		return toreturn;
 	}
+	//Return a 0, 2, or 4 at random
+	public int fakepredict(Tweet predictionTweet, HashMap<String, ArrayList<Integer>> predictionData) {	
+		Random rand = new Random();
+		int randreturn = rand.nextInt(1000);
+		if (randreturn > 0 && randreturn < 333) {
+			return 0;
+		}
+		else if (randreturn > 333 && randreturn < 666) {
+			return 2;
+		}
+		else return 4;
+	}
 	
+	//judgeAccuracy but calling fakepredict instead of predict
+	public String[] fakejudgeAccuracy(HashMap<String, ArrayList<Integer>> predictionData) {
+		int negativeguess = 0;
+		int neutralguess = 0;
+		int positiveguess = 0;
+		int negativereal = 0;
+		int neutralreal = 0;
+		int positivereal = 0;
+		int correct = 0;
+		int incorrect = 0;
+		Iterator<Entry<Long, Tweet>> twitterator = TweetCollection.entrySet().iterator();
+		while(twitterator.hasNext()){
+			HashMap.Entry<Long, Tweet> tweet = twitterator.next();
+			int prediction = this.fakepredict(tweet.getValue(), predictionData);
+			if (prediction == 0) {
+				negativeguess++;
+			}
+			else if (prediction == 4) {
+				positiveguess++;
+			}
+			else neutralguess++;
+			if (tweet.getValue().getPolarity() == 0) {
+				negativereal++;
+			}
+			else if (tweet.getValue().getPolarity() == 4)
+			{
+				positivereal++;
+			}
+			else neutralreal++;
+			if (prediction == tweet.getValue().getPolarity()) {
+				correct++;
+			}
+			else if (prediction != tweet.getValue().getPolarity()) {
+				incorrect++;
+			}
+		}
+		String[] toreturn = {"Overall model accuracy: " + correct + " correct, " + incorrect + " incorrect, " + ((double)correct/((double)(incorrect + correct))) * 100 + " % accuracy",
+				"***** Polarity 4 Tweets: " + positiveguess + " guessed, " + positivereal + " actual",
+				"***** Polarity 2 Tweets: " + neutralguess + " guessed, " + neutralreal + " actual",
+				"***** Polarity 0 Tweets: " + negativeguess + " guessed, " + negativereal + " actual"};
+		return toreturn;
+	}
 	
 }
