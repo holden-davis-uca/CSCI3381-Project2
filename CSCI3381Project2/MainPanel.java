@@ -4,6 +4,7 @@
 
 package CSCI3381Project2;
 
+import CSCI3381Project1.*;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
@@ -18,8 +19,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.HashMap;
-
-import CSCI3381Project1.*;
 import javax.swing.JRadioButton;
 import javax.swing.JComboBox;
 import javax.swing.ButtonGroup;
@@ -101,9 +100,6 @@ public class MainPanel extends JPanel{
 		//Twitter Colors
 		Color Blue = new Color(29,161,242);
 		Color Black = new Color(20,23,26);
-		Color DarkGray = new Color(101,119,134);
-		Color LightGray= new Color(170,184,194);
-		Color ExtraLightGray = new Color(225,232,237);
 		//Yes they really call it this
 		Color ExtraExtraLightGray = new Color(245,248,250);
 		//Twitter font used on Microsoft devices, various sizes for different componenets
@@ -391,6 +387,9 @@ public class MainPanel extends JPanel{
 		add(contentlabel);
 		
 		//These color settings use the Dark Gray, Light Gray, and Extra Light Gray colors; the result is a more material-design type look, but it can make a lot of the text difficult to see on some screens
+//		Color DarkGray = new Color(101,119,134);
+//		Color LightGray= new Color(170,184,194);
+//		Color ExtraLightGray = new Color(225,232,237);
 		
 //		loginuserbutton.setForeground(DarkGray);
 //		loginuserbutton.setBackground(ExtraLightGray);
@@ -636,6 +635,7 @@ public class MainPanel extends JPanel{
 		{
 			tweetmodel.removeAllElements();
 			String[] results = testing.judgeAccuracy(testData);
+			//String[] results = testing.fakejudgeAccuracy(testData);
 			for (String result: results) {
 				tweetmodel.addElement(result);
 			}
@@ -647,6 +647,7 @@ public class MainPanel extends JPanel{
 				String[] stuff = tweetstring.split(",");
 				Tweet tweet = new Tweet(Integer.parseInt(stuff[0]), Long.parseLong(stuff[1]), stuff[2], stuff[3]);
 				int polguess = tweets.predict(tweet, testData);
+				//int polguess = tweets.fakepredict(tweet, testData);
 				JOptionPane.showMessageDialog(getParent(), "Predicted a polarity of " + polguess + " for chosen tweet.");
 			} catch(Exception e) {
 				JOptionPane.showMessageDialog(getParent(), "Choose a tweet to predict!");

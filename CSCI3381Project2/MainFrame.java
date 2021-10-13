@@ -4,12 +4,12 @@
 
 package CSCI3381Project2;
 
+import CSCI3381Project1.*;
 import java.awt.Dimension;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-
 import javax.swing.JFrame;
-import CSCI3381Project1.*;
+import javax.swing.JOptionPane;
 
 public class MainFrame {
 	
@@ -32,7 +32,7 @@ public class MainFrame {
 				}
 				
 			});
-		}
+		} else JOptionPane.showMessageDialog(null, "Source file does not exist!");
 
 	}
 
