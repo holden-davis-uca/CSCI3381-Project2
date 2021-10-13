@@ -30,6 +30,10 @@ import javax.swing.JToggleButton;
 
 public class MainPanel extends JPanel{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String datainFile;
 	private String testinFile;
 	private String dataOutFile;
@@ -93,13 +97,27 @@ public class MainPanel extends JPanel{
 		tweets = new TweetCollection(datainFile);
 		testData = tweets.createPredictionData();
 		testing = new TweetCollection(testinFile);
-		setBackground(new Color(29, 161, 242));
+		
+		//Twitter Colors
+		Color Blue = new Color(29,161,242);
+		Color Black = new Color(20,23,26);
+		Color DarkGray = new Color(101,119,134);
+		Color LightGray= new Color(170,184,194);
+		Color ExtraLightGray = new Color(225,232,237);
+		//Yes they really call it this
+		Color ExtraExtraLightGray = new Color(245,248,250);
+		//Twitter font used on Microsoft devices, various sizes for different componenets
+		Font hugefont = new Font("Segoe UI", Font.BOLD | Font.ITALIC, 20);
+		Font bigfont = new Font("Segoe UI", Font.BOLD, 15);
+		Font mainfont = new Font("Segoe UI", Font.BOLD, 12);
+		
+		setBackground(Blue);
 		setLayout(null);
 		
 		//Initialize Login Elements
 		loginanonbutton = new JButton("Anonymous Login");
-		loginanonbutton.setFont(new Font("Source Serif Pro", Font.PLAIN, 10));
-		loginanonbutton.setBounds(300, 370, 120, 30);
+		loginanonbutton.setFont(mainfont);
+		loginanonbutton.setBounds(290, 370, 150, 30);
 		loginanonbutton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				toCore("Username");
@@ -109,7 +127,7 @@ public class MainPanel extends JPanel{
 		add(loginanonbutton);
 		
 		loginunametf = new JTextField();
-		loginunametf.setFont(new Font("Source Serif Pro", Font.PLAIN, 10));
+		loginunametf.setFont(mainfont);
 		loginunametf.setBounds(300, 180, 120, 30);
 		loginunametf.setHorizontalAlignment(SwingConstants.CENTER);
 		loginunametf.setText("Username");
@@ -118,7 +136,7 @@ public class MainPanel extends JPanel{
 		add(loginunametf);
 		
 		loginuserbutton = new JButton("Login as User");
-		loginuserbutton.setFont(new Font("Source Serif Pro", Font.PLAIN, 10));
+		loginuserbutton.setFont(mainfont);
 		loginuserbutton.setBounds(300, 210, 120, 30);
 		loginuserbutton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -133,9 +151,9 @@ public class MainPanel extends JPanel{
 		
 		titlebanner = new JTextField();
 		titlebanner.setEditable(false);
-		titlebanner.setForeground(Color.WHITE);
-		titlebanner.setFont(new Font("Consolas", Font.BOLD | Font.ITALIC, 20));
-		titlebanner.setBackground(new Color(20,23,26));
+		titlebanner.setForeground(ExtraExtraLightGray);
+		titlebanner.setFont(hugefont);
+		titlebanner.setBackground(Black);
 		titlebanner.setHorizontalAlignment(SwingConstants.CENTER);
 		titlebanner.setText("JTwitter");
 		titlebanner.setBounds(0, 30, 720, 40);
@@ -145,7 +163,7 @@ public class MainPanel extends JPanel{
 		
 		//Intialize core elements
 		corebackbutton = new JButton("Back");
-		corebackbutton.setFont(new Font("Source Serif Pro", Font.PLAIN, 10));
+		corebackbutton.setFont(new Font("Segoe UI", Font.BOLD, 10));
 		corebackbutton.setBounds(20, 400, 60, 30);
 		corebackbutton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -155,7 +173,7 @@ public class MainPanel extends JPanel{
 		);
 		add(corebackbutton);
 		coresearchbutton = new JButton("Search");
-		coresearchbutton.setFont(new Font("Source Serif Pro", Font.PLAIN, 15));
+		coresearchbutton.setFont(bigfont);
 		coresearchbutton.setBounds(20, 100, 120, 60);
 		coresearchbutton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -165,7 +183,7 @@ public class MainPanel extends JPanel{
 		);
 		add(coresearchbutton);
 		corepostbutton = new JButton("Post");
-		corepostbutton.setFont(new Font("Source Serif Pro", Font.PLAIN, 15));
+		corepostbutton.setFont(bigfont);
 		corepostbutton.setBounds(20, 190, 120, 60);
 		corepostbutton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -175,7 +193,7 @@ public class MainPanel extends JPanel{
 		);
 		add(corepostbutton);
 		corerefreshbutton = new JButton("Refresh");
-		corerefreshbutton.setFont(new Font("Source Serif Pro", Font.PLAIN, 10));
+		corerefreshbutton.setFont(new Font("Segoe UI", Font.BOLD, 10));
 		corerefreshbutton.setBounds(630, 400, 70, 30);
 		corerefreshbutton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -187,13 +205,13 @@ public class MainPanel extends JPanel{
 		
 		coreloginnotif = new JLabel("Logged In As:");
 		coreloginnotif.setHorizontalAlignment(SwingConstants.CENTER);
-		coreloginnotif.setFont(new Font("Source Serif Pro", Font.PLAIN, 12));
+		coreloginnotif.setFont(new Font("Segoe UI", Font.BOLD | Font.ITALIC, 13));
 		coreloginnotif.setBounds(20, 300, 120, 20);
 		add(coreloginnotif);
 		
 		coreloginval = new JLabel("Anonymous");
 		coreloginval.setHorizontalAlignment(SwingConstants.CENTER);
-		coreloginval.setFont(new Font("Source Serif Pro", Font.PLAIN, 12));
+		coreloginval.setFont(new Font("Segoe UI", Font.BOLD | Font.ITALIC, 13));
 		coreloginval.setBounds(20, 320, 120, 20);
 		add(coreloginval);
 		
@@ -206,7 +224,7 @@ public class MainPanel extends JPanel{
 
 		//Initialize search elements
 		backbutton = new JButton("Back");
-		backbutton.setFont(new Font("Source Serif Pro", Font.PLAIN, 10));
+		backbutton.setFont(new Font("Segoe UI", Font.BOLD, 10));
 		backbutton.setBounds(20, 400, 60, 30);
 		backbutton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -217,12 +235,14 @@ public class MainPanel extends JPanel{
 		add(backbutton);
 		
 		searchfield = new JTextField();
+		searchfield.setFont(mainfont);
 		searchfield.setHorizontalAlignment(SwingConstants.CENTER);
 		searchfield.setBounds(20, 190, 120, 60);
 		add(searchfield);
 		searchfield.setColumns(10);
 		
 		searcherbutton = new JButton("Search");
+		searcherbutton.setFont(mainfont);
 		searcherbutton.setBounds(20, 290, 120, 60);
 		searcherbutton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -233,11 +253,13 @@ public class MainPanel extends JPanel{
 		add(searcherbutton);
 		
 		searchoptioncombobox = new JComboBox<String>();
+		searchoptioncombobox.setFont(mainfont);
 		searchoptioncombobox.setModel(new DefaultComboBoxModel<String>(new String[] {"Search by ID", "Search by User"}));
 		searchoptioncombobox.setBounds(20, 100, 120, 60);
 		add(searchoptioncombobox);
 		
 		deletetweetbutton = new JButton("Delete");
+		deletetweetbutton.setFont(mainfont);
 		deletetweetbutton.setBounds(200, 400, 100, 30);
 		deletetweetbutton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -248,6 +270,7 @@ public class MainPanel extends JPanel{
 		add(deletetweetbutton);
 		
 		predictionbutton = new JButton("Predict");
+		predictionbutton.setFont(mainfont);
 		predictionbutton.setBounds(600, 400, 100, 30);
 		predictionbutton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -258,6 +281,7 @@ public class MainPanel extends JPanel{
 		add(predictionbutton);
 		
 		predicttypebutton = new JToggleButton("Chosen Tweet");
+		predicttypebutton.setFont(mainfont);
 		predicttypebutton.setBounds(450, 400, 140, 30);
 		predicttypebutton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -272,6 +296,7 @@ public class MainPanel extends JPanel{
 		
 		//Initialize post elements
 		postposterbutton = new JButton("Post");
+		postposterbutton.setFont(mainfont);
 		postposterbutton.setBounds(340, 400, 100, 30);
 		postposterbutton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -282,6 +307,7 @@ public class MainPanel extends JPanel{
 		add(postposterbutton);
 		
 		genIDcheckbox = new JCheckBox("Auto Generate ID");
+		genIDcheckbox.setFont(mainfont);
 		genIDcheckbox.setHorizontalAlignment(SwingConstants.CENTER);
 		genIDcheckbox.setBounds(200, 400, 130, 30);
 		genIDcheckbox.addActionListener(new ActionListener() {
@@ -300,14 +326,17 @@ public class MainPanel extends JPanel{
 		add(genIDcheckbox);
 		
 		pol2radio = new JRadioButton("2 :|");
+		pol2radio.setFont(mainfont);
 		pol2radio.setBounds(8, 225, 72, 24);
 		add(pol2radio);
 		
 		pol4radio = new JRadioButton("4 :)");
+		pol4radio.setFont(mainfont);
 		pol4radio.setBounds(8, 197, 72, 24);
 		add(pol4radio);
 		
 		pol0radio = new JRadioButton("0 :(");
+		pol0radio.setFont(mainfont);
 		pol0radio.setBounds(8, 253, 72, 24);
 		add(pol0radio);
 		
@@ -317,42 +346,90 @@ public class MainPanel extends JPanel{
 		polarities.add(pol0radio);
 		
 		postIDfield = new JTextField();
+		postIDfield.setFont(mainfont);
 		postIDfield.setHorizontalAlignment(SwingConstants.CENTER);
 		postIDfield.setBounds(90, 230, 120, 20);
 		add(postIDfield);
 		postIDfield.setColumns(10);
 		
 		postuserfield = new JTextField();
+		postuserfield.setFont(mainfont);
 		postuserfield.setHorizontalAlignment(SwingConstants.CENTER);
 		postuserfield.setBounds(220, 230, 120, 20);
 		add(postuserfield);
 		postuserfield.setColumns(10);
 		
 		postcontentfield = new JTextField();
+		postcontentfield.setFont(mainfont);
 		postcontentfield.setHorizontalAlignment(SwingConstants.CENTER);
 		postcontentfield.setBounds(340, 200, 360, 80);
 		add(postcontentfield);
 		postcontentfield.setColumns(10);
 		
 		pollabel = new JLabel("Polarity");
+		pollabel.setFont(mainfont);
 		pollabel.setHorizontalAlignment(SwingConstants.CENTER);
 		pollabel.setBounds(20, 170, 60, 20);
 		add(pollabel);
 		
 		idlabel = new JLabel("ID");
+		idlabel.setFont(mainfont);
 		idlabel.setHorizontalAlignment(SwingConstants.CENTER);
 		idlabel.setBounds(90, 170, 120, 20);
 		add(idlabel);
 		
 		userlabel = new JLabel("User");
+		userlabel.setFont(mainfont);
 		userlabel.setHorizontalAlignment(SwingConstants.CENTER);
 		userlabel.setBounds(220, 170, 120, 20);
 		add(userlabel);
 		
 		contentlabel = new JLabel("Content");
+		contentlabel.setFont(mainfont);
 		contentlabel.setHorizontalAlignment(SwingConstants.CENTER);
 		contentlabel.setBounds(340, 170, 360, 20);
 		add(contentlabel);
+		
+		//These color settings use the Dark Gray, Light Gray, and Extra Light Gray colors; the result is a more material-design type look, but it can make a lot of the text difficult to see on some screens
+		
+//		loginuserbutton.setForeground(DarkGray);
+//		loginuserbutton.setBackground(ExtraLightGray);
+//		loginanonbutton.setForeground(DarkGray);
+//		loginanonbutton.setBackground(ExtraLightGray);
+//		corebackbutton.setForeground(DarkGray);
+//		corebackbutton.setBackground(ExtraLightGray);
+//		coresearchbutton.setForeground(DarkGray);
+//		coresearchbutton.setBackground(ExtraLightGray);
+//		corepostbutton.setForeground(DarkGray);
+//		corepostbutton.setBackground(ExtraLightGray);
+//		corerefreshbutton.setForeground(DarkGray);
+//		corerefreshbutton.setBackground(ExtraLightGray);
+//		backbutton.setForeground(DarkGray);
+//		backbutton.setBackground(ExtraLightGray);
+//		searcherbutton.setForeground(DarkGray);
+//		searcherbutton.setBackground(ExtraLightGray);
+//		deletetweetbutton.setForeground(DarkGray);
+//		deletetweetbutton.setBackground(ExtraLightGray);
+//		predicttypebutton.setForeground(DarkGray);
+//		predicttypebutton.setBackground(ExtraLightGray);
+//		postposterbutton.setForeground(DarkGray);
+//		postposterbutton.setBackground(ExtraLightGray);
+//		predictionbutton.setForeground(DarkGray);
+//		predictionbutton.setBackground(ExtraLightGray);
+//		loginunametf.setForeground(DarkGray);
+//		loginunametf.setBackground(LightGray);
+//		searchfield.setForeground(DarkGray);
+//		searchfield.setBackground(LightGray);
+//		searchoptioncombobox.setForeground(DarkGray);
+//		searchoptioncombobox.setBackground(LightGray);
+//		genIDcheckbox.setForeground(DarkGray);
+//		genIDcheckbox.setBackground(ExtraLightGray);
+//		pol0radio.setForeground(DarkGray);
+//		pol0radio.setBackground(ExtraLightGray);
+//		pol2radio.setForeground(DarkGray);
+//		pol2radio.setBackground(ExtraLightGray);
+//		pol4radio.setForeground(DarkGray);
+//		pol4radio.setBackground(ExtraLightGray);
 		
 		//Always start at login screen
 		toLogin();
@@ -473,7 +550,9 @@ public class MainPanel extends JPanel{
 		searchfield.setText(loginunametf.getText());
 		searchoptioncombobox.setSelectedIndex(1);
 		titlebanner.setText("Search");
-		search(username);
+		if (!loginunametf.getText().equals("Username")) {
+			search(username);
+		}
 		
 		backbutton.setVisible(true);		
 		searchfield.setVisible(true);
