@@ -86,13 +86,13 @@ public class MainPanel extends JPanel{
 	//Initialize ALL elements in constructor, but only set login elements to be visible by calling toLogin() at the end
 	public MainPanel() {
 		//Testing Configuration
-		datainFile = "./CSCI3381Project1/trainingProcessed.txt";
-		testinFile = "./CSCI3381Project1/testProcessed.txt";
-		dataOutFile = "./CSCI3381Project1/out.txt";
-		//Production Configuration
 //		datainFile = "./CSCI3381Project1/trainingProcessed.txt";
 //		testinFile = "./CSCI3381Project1/testProcessed.txt";
-//		dataOutFile = "./CSCI3381Project1/trainingProcessed.txt";
+//		dataOutFile = "./CSCI3381Project1/out.txt";
+		//Production Configuration
+		datainFile = "./CSCI3381Project1/trainingProcessed.txt";
+		testinFile = "./CSCI3381Project1/testProcessed.txt";
+		dataOutFile = "./CSCI3381Project1/trainingProcessed.txt";
 		tweets = new TweetCollection(datainFile);
 		testData = tweets.createPredictionData();
 		testing = new TweetCollection(testinFile);
@@ -721,8 +721,9 @@ public class MainPanel extends JPanel{
 		}
 	}
 	//To be automatically called by MainFrame when window is closed
-	public void writeOut() {
-		tweets.writeOut(dataOutFile);
+	public void doClose(String filePath) {
+		//tweets.writeOut(dataOutFile);
+		tweets.writeFileRunnable(dataOutFile, filePath);
 	}
 }
 	
