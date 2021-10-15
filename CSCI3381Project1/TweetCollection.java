@@ -366,5 +366,28 @@ public class TweetCollection {
 				"***** Polarity 0 Tweets: " + negativeguess + " guessed, " + negativereal + " actual"};
 		return toreturn;
 	}
+	public void writeFileRunnable(String fn, String filePath) { 
+		  String path = ""; 
+		  try 
+		  { 
+		   String[] tokens = filePath.split("\\\\"); 
+		   for (int i = 0; i < tokens.length-1; i++) { 
+		    path = path + tokens[i] + "\\"; 
+		   }     
+		   FileWriter fw = new FileWriter(path+fn); 
+		   BufferedWriter myOutFile = new BufferedWriter(fw); 
+		   Iterator<Entry<Long, Tweet>> twitterator = TweetCollection.entrySet().iterator();
+			while(twitterator.hasNext()){
+				HashMap.Entry<Long, Tweet> tweet = twitterator.next();
+				myOutFile.write(tweet.getValue().getPolarity() + "," + tweet.getValue().getID() + "," + tweet.getValue().getUser() + "," + tweet.getValue().getContent() + "\n");
+			}
+			myOutFile.flush();
+			myOutFile.close();
+		  } 
+		  catch (Exception e) { 
+		   e.printStackTrace(); 
+		   System.err.println("Didn't save to " +path+ fn);    
+		  } 
+		 }
 	
 }
